@@ -1,0 +1,58 @@
+---
+title: "Mappe_2_markdown"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Mappe Oppgave 2
+
+```{r dattasett og nødvendige pakker}
+library(jsonlite)
+library(tidyverse)
+library(ggplot2)
+library(ggrepel)
+
+
+#datasett
+df <- fromJSON("https://static01.nyt.com/newsgraphics/2021/12/20/us-coronavirus-deaths-2021/ff0adde21623e111d8ce103fedecf7ffc7906264/scatter.json")
+
+```
+
+### Oppgave 1
+```{r Oppgave1}
+plot <- df %>% 
+  ggplot(aes(x= fully_vaccinated_pct_of_pop, y= deaths_per_100k, label = name )) +
+  geom_point() +
+  geom_label_repel(
+    max.overlaps = Inf,
+    size = 3.5,
+    label.size = 0,
+    label.padding = 0,
+    label.r = 0,
+  ) +
+  labs(title= "Covid-19 dødsfall etter universal voksen vaksinedose sammenlignet med vaksinasjons rate", 
+       x = "Andel fullvaksinert befolkning",
+       y = "dødsfall per 100k") +
+  theme_bw()
+
+plot
+
+
+```
+### Oppgave 2
+
+
+
+```{r oppgave 2}
+lm( deaths_per_100k ~ fully_vaccinated_pct_of_pop, data = df)
+
+
+
+plot + geom_smooth(method = lm)
+
+
+```
+Her bruker vi lm() funksjon for å lage en lineær modell, som vi kan bruke til å se årsaksammenheng mellom andel vaksinerte og antall døde per 100k innbyggere. vi ser at det er relativt lite avvik fra den lineære modellen.

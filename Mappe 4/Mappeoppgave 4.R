@@ -1,41 +1,46 @@
-rm(list=ls())
-install.packages("rlist")
+# Laster ned nødvendige pakker:
+
+library(purrr)
 library(rvest)
 library(tidyverse)
 library(rlist)
-# Henter data sett
-url <- "https://timeplan.uit.no/emne_timeplan.php?sem=22v&module%5B%5D=SOK-1005-1&week=1-20&View=list&module[]=SOK-1006-1&module[]=SOK-1016-1#week-9"
 
-webpage <- read_html(url)
+browseURL("https://timeplan.uit.no/emne_timeplan.php?sem=22v&module%5B%5D=SOK-1005-1&week=1-20&View=list")
 
+url <-"https://timeplan.uit.no/emne_timeplan.php?sem=22v&module%5B%5D=SOK-1005-1&week=1-20&View=list"
 
-#skraper tabell
-table <- html_nodes(webpage, 'table')
-table <- html_table(table, fill=TRUE) 
+liste <- list("https://timeplan.uit.no/emne_timeplan.php?sem=22v&module%5B%5D=SOK-1005-1&week=1-20&View=list", 
+              "https://timeplan.uit.no/emne_timeplan.php?sem=22v&module%5B%5D=SOK-1006-1&week=1-20&View=list",
+              "https://timeplan.uit.no/emne_timeplan.php?sem=22v&module%5B%5D=SOK-1016-1&week=1-20&View=list")
 
-table[[1]]
-df <- list.stack(table)
-df
+# Lager funksjonen: timeplan
 
-colnames(df) <- df[1,]
-df
+timeplan <- function(url1){
+  page <- read_html(url1)
+  table <- html_nodes(page, 'table')
+  table <- html_table(table, fill=TRUE) 
+  dframe <- list.stack(table)
+  colnames(dframe) <- dframe[1,]
+  dframe <- dframe %>% filter(!Dato=="Dato")
+  dframe <- dframe %>% separate(Dato, 
+                              into = c("Dag", "Dato"), 
+                              sep = "(?<=[A-Za-z])(?=[0-9])")
+  dframe <- dframe[-length(dframe$Dag),]
+  dframe$Dato <- as.Date(dframe$Dato, format="%d.%m.%Y")
+  dframe$Uke <- strftime(dframe$Dato, format = "%V")
+  dframe <- dframe %>% select(Dag,Dato,Uke,Tid,Rom)
+  return(dframe)
+}
+# Bruker map- funksjonen for å legge sammen liste og funksjonen
 
-df <- df %>% 
-  filter(!Dato=="Dato") %>% 
-  separate(Dato, into = c("Dag", "Dato"), sep = "(?<=[A-Za-z])(?=[0-9])")
-  
+map(liste, timeplan)
 
+# Legger inn timeplanen og listen inn i selve sluttproduktet: semesterplanen
 
-df <- df[-length(df$Dag),]
+semesterplan <- map(liste, timeplan)
+semesterplan <- bind_rows(semesterplan)
+semesterplan %>% 
+  arrange(Dato)
 
-
-df$Dato <- as.Date(df$Dato, format="%d.%m.%Y")
-
-
-df$Uke <- strftime(df$Dato, format = "%V")
-df %>% 
-  select(Dag,Dato,Uke,Tid,Rom,Emnekode)
-
-df
-
+#edit etter hjelp fra medstudenter
 

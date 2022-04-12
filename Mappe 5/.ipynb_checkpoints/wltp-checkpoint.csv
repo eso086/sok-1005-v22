@@ -1,0 +1,89 @@
+                        Bilmodell            ;                        Test            ;                        Rekkevidde i testen            ;                        Oppgitt WLTP            ;                        Avvik i prosent            ;                        Forbruk (målt) kWt/ 100km            ;                        Forbruk (oppgitt) kWt/ 100km            ;                        Utstyrsnivå            
+Audi e-tron 55;Sommer 2020;399 km;370 km;7,83;20,3;24,3;Advanced Business
+Audi e-tron 55 Sportback;Sommer 2020;436 km;376 km;15,95;19,8;23,9;S-Line
+Audi e-tron Quattro 50;Vinter 2020;259 km;332 km;−13,38;N/A;23,9;Advanced Sport
+Audi e-tron Quattro 55;Vinter 2020;341 km;415 km;−11,42;24,4;24,3;Advanced Business
+Audi e-Tron GT quattro;Sommer 2021;528,1 km;468 km;12,84;16,1;20,1;GT quattro Pro
+BMW i3;Sommer 2020;319 km;310 km;2,90;12,5;15,5;120 Ah Fully Charged
+BMW i3;Vinter 2020;245 km;310 km;−20,71;15,6;13,1;120 Ah Fully Charged
+BMW iX3;Vinter 2021;432 km;450 km;−4,00;17,0;19,0;Fully Charged Edition
+BMW iX3;Sommer 2021;556,2 km;450 km;23,60;13,3;19,0;Fully Charged Edition
+Citroën ë-C4;Vinter 2021;261 km;337 km;−22,55;16,3;14,2;Shine
+Citroën ë-C4;Sommer 2021;345,0 km;350 km;−1,43;13,1;14,3;Shine
+DS 3 Crossback e-Tense;Vinter 2021;250 km;320 km;−21,87;17,1;14,7;Grand Chic
+DS 3 Crossback e-Tense;Sommer 2020;351 km;320 km;9,68;13,3;14,7;Grand Chic
+Fiat 500;Sommer 2021;307,8 km;298 km;3,29;12,4;14,9;La Prima Kabriolet
+Fiat 500;Vinter 2021;230 km;300 km;−23,33;15,6;14,7;Icon
+Ford Mustang Mach-E AWD;Vinter 2021;430 km;540 km;−20,37;20,0;18,7;AWD Long Range
+Ford Mustang Mach-E AWD;Sommer 2021;551,9 km;540 km;2,20;16,0;18,7;AWD Long Range Rapid Red
+Ford Mustang Mach-E RWD;Vinter 2021;502 km;610 km;−17,70;19,0;16,5;RWD
+Ford Mustang Mach-E RWD;Sommer 2021;617,9 km;610 km;1,30;15,0;16,5;Teknopakke + panoramatak
+Honda e;Vinter 2021;162 km;210 km;−22,85;19,2;17,8;Advanced
+Honda e;Sommer 2021;236,2 km;210 km;12,48;13,4;17,8;Advanced
+Hyundai Ioniq;Sommer 2020;342 km;311 km;9,96;11,1;13,8;Premium
+Hyundai Ioniq;Vinter 2020;269 km;311 km;−10,19;13,1;13,8;Premium
+Hyundai Kona;Sommer 2020;568 km;480 km;18,33;12,3;14,7;Premium
+Hyundai Kona;Sommer 2021;537,0 km;484 km;10,95;12,1;14,7;Premium Long Range
+Hyundai Kona;Vinter 2020;404 km;449 km;−9,91;15,5;15,4;Premium
+Ioniq 5;Sommer 2021;502,0 km;460 km;9,13;14,4;17,7;Premium
+Jaguar I-Pace;Sommer 2020;454 km;436 km;4,12;17,8;21,2;Nordic Edition
+Jaguar I-Pace;Vinter 2020;333 km;470 km;−23,44;23,4;21,2;400 PS Auto
+Kia e-Niro;Sommer 2020;524 km;455 km;15,16;11,9;15,9;Exclusive
+Kia e-Niro;Vinter 2020;360 km;455 km;−20,81;17,2;15,9;First Edition
+Kia e-Soul;Sommer 2020;520 km;452 km;15,04;12,2;15,7;Exclusive
+Kia e-Soul;Vinter 2020;352 km;452 km;−22,12;18,1;15,7;Exclusive
+Lexus UX 300e;Vinter 2021;257 km;309 km;−16,82;19,0;17,0;Premium
+Mazda MX-30;Vinter 2021;165 km;200 km;−17,50;18,0;19,0;First Edition
+Mazda MX-30;Sommer 2021;219,6 km;200 km;9,80;13,2;19,0;Cosmo
+Mercedes EQA;Sommer 2021;451,8 km;417 km;8,35;15,0;18,1;Progressive Edition
+Mercedes EQC;Sommer 2020;434 km;404 km;7,42;18,2;22,3;AMG
+Mercedes EQC;Vinter 2020;307 km;417 km;−24,01;25,4;22,3;AMG-Line
+MG ZS EV;Sommer 2020;310 km;263 km;17,87;13,7;18,6;Luxury
+Mini Cooper SE;Sommer 2020;272 km;234 km;16,23;11,3;15,8;Experience
+Mini Cooper SE;Vinter 2021;173 km;230 km;−24,78;15,2;230,0;SE Experience
+Nissan e-NV200;Sommer 2020;278 km;200 km;39,00;13,7;25,9;Evalia (Premium)
+Nissan Leaf 40 kWt;Sommer 2020;305 km;270 km;12,96;11,9;20,6;N-Connecta
+Nissan Leaf 40 kWt;Vinter 2020;208 km;270 km;−22,63;16,5;20,6;Tekna
+Nissan Leaf 62 kWt;Sommer 2020;396 km;385 km;2,85;13,7;18,0;E+Tekna
+Nissan Leaf 62 kWt;Vinter 2020;298 km;385 km;−22,42;N/A;18,0;E+Tekna
+Opel Ampera-e;Sommer 2020;512 km;423 km;21,04;11,4;16,5;Premium
+Opel Ampera-e;Vinter 2020;296 km;423 km;−29,81;20,0;16,5;Premium
+Opel Corsa e;Sommer 2020;358 km;337 km;6,23;12,9;16,8;Elegance
+Opel Corsa e;Vinter 2021;251 km;337 km;−25,51;16,7;16,8;Elegance
+Opel Mokka-e;Sommer 2021;332,4 km;324 km;2,59;13,8;15,6;Ultimate
+Peugeot e-2008;Sommer 2020;332 km;310 km;7,09;13,7;15,6;GT-Line
+Peugeot e-208;Sommer 2020;346 km;340 km;1,76;13,4;14,7;GT
+Peugeot e-208;Vinter 2021;240 km;340 km;−29,41;17,7;14,7;GT
+Polestar 2;Sommer 2021;467,0 km;470 km;−0,64;16,6;15,6;Standard (Snart Long Range Dual Motor Launch Edition)
+Polestar 2;Vinter 2021;344 km;468 km;−26,49;21,0;19,3;Standard
+Porsche Taycan;Sommer 2020;475 km;450 km;5,55;17,4;21,1;4S PBP
+Porsche Taycan;Vinter 2021;385 km;464 km;−17,02;21,0;21,1;4S PBP
+Renault Zoe;Sommer 2020;453 km;380 km;19,21;11,4;17,3;Intens
+Renault Zoe;Vinter 2020;313 km;395 km;−16,76;16,1;17,2;R135 Edition One
+Seat Mii Electric;Sommer 2020;278 km;258 km;7,75;10,3;14,6;Launch Edition
+Seat Mii Electric;Vinter 2020;226 km;260 km;−12,17;13,2;16,0;Launch Edition
+Skoda Citigo-e iV;Sommer 2020;280 km;258 km;8,52;N/A;16,0;Style
+Skoda Citigo-e iV;Vinter 2020;220 km;260 km;−14,73;13,6;16,0;Style
+Skoda Enyaq;Sommer 2021;522,0 km;520 km;0,38;14,5;17,2;iV80 High + Suite
+Tesla Model 3 LR;Sommer 2020;612 km;560 km;9,28;11,9;16,0;Long Range Dual Motor
+Tesla Model 3 LR;Vinter 2020;404 km;560 km;−27,79;18,5;18,0;Long Range Dual Motor
+Tesla Model 3 LR;Vinter 2021;514 km;580 km;−11,37;13,6;14,8;Long Range
+Tesla Model 3 LR;Sommer 2021;654,9 km;614 km;6,66;12,4;14,8;Long Range AWD
+Tesla Model 3 SR;Sommer 2021;454,4 km;448 km;1,43;12,2;14,2;Standard Range Plus RWD
+Tesla Model S;Sommer 2020;645 km;610 km;5,73;13,9;19,0;Long Range
+Tesla Model S;Vinter 2020;469 km;610 km;−26,26;20,0;19,0;Long Range
+Tesla Model X;Sommer 2020;546 km;507 km;7,69;17,3;22,6;Long Range
+Tesla Model X;Vinter 2020;419 km;507 km;−17,24;21,7;22,6;Long Range
+Volkswagen ID.3 1st Plus;Sommer 2021;421,0 km;420 km;0,24;13,3;16,2;1st Plus
+Volkswagen ID.3 1st Plus;Vinter 2021;340 km;418 km;−18,66;16,6;15,8;1st Plus
+Volkswagen ID.3 Pro S;Sommer 2021;564,0 km;539 km;4,64;13,5;16,2;Pro S 5-seter
+Volkswagen ID.4 1st Max;Sommer 2021;532,0 km;487 km;9,24;14,5;18,2;1st Max
+Volkswagen e-Golf;Sommer 2020;259 km;222 km;16,66;11,4;15,7;Exclusive
+Volkswagen e-Golf;Vinter 2020;198 km;222 km;−10,77;14,9;15,9;Exclusive
+Volkswagen e-Up!;Sommer 2020;289 km;251 km;15,10;9,7;14,5;Entry
+Volkswagen e-Up!;Vinter 2020;226 km;251 km;−9,96;13,0;16,0;Entry
+Volvo XC40 Recharge P8;Sommer 2021;445,4 km;415 km;7,33;17,5;24,0;Recharge P8 AWD
+Volvo XC40 Recharge P8;Vinter 2021;332 km;409 km;−18,82;21,8;23,9;Recharge Pure Electric P8
+Xpeng G3;Sommer 2020;506 km;450 km;12,44;13,1;14,7;Smart
+Xpeng G3;Sommer 2021;438,9 km;451 km;−2,68;-;14,7;Premium
+Xpeng G3;Vinter 2021;341 km;451 km;−24,39;16,7;14,7;Smart

@@ -1,4 +1,4 @@
-                        Bilmodell            ;                        Test            ;                        Rekkevidde i testen            ;                        Oppgitt WLTP            ;                        Avvik i prosent            ;                        Forbruk (målt) kWt/ 100km            ;                        Forbruk (oppgitt) kWt/ 100km            ;                        Utstyrsnivå            
+Bilmodell;Test;Rekkevidde i testen;Oppgitt WLTP;Avvik i prosent;Forbruk (målt) kWt/ 100km;Forbruk (oppgitt) kWt/ 100km;Utstyrsnivå
 Audi e-tron 55;Sommer 2020;399 km;370 km;7,83;20,3;24,3;Advanced Business
 Audi e-tron 55 Sportback;Sommer 2020;436 km;376 km;15,95;19,8;23,9;S-Line
 Audi e-tron Quattro 50;Vinter 2020;259 km;332 km;−13,38;N/A;23,9;Advanced Sport

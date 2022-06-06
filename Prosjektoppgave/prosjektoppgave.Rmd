@@ -1,28 +1,322 @@
 ---
-title: "Prosjekt oppgave"
-author: "Sofia-Andrea Møen, Idunn Raade Olsen og Erlend Sørra"
+title: "Prosjektoppgave SOK-1005"
+author: "Gruppe nr. 4"
 date: "6/6/2022"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(janitor)
+library(lubridate) ## for date time manipulation
+library(scales) ## Formatting numbers and values
+library(hrbrthemes)# For changing ggplot theme
+library(extrafont) # More font options
+library(ggplot2) 
+library(ggthemes)
+library(treemapify)
 ```
 
-## R Markdown
+## Oppgave 1
 
 
 
-```{r cars}
-summary(cars)
+```{r Oppgave 1 combining datasets, include=FALSE}
+app <- read.csv(
+  file.choose(),
+  header = T,
+  encoding = "utf-8"
+)
+cCrime <- read.csv(
+  file.choose(),
+  header = T,
+  encoding = "utf-8"
+)
+cDemo <- read.csv(
+  file.choose(),
+  header = T,
+  encoding = "utf-8"
+)
+cEmp <- read.csv(
+  file.choose(),
+  header = T,
+  encoding = "utf-8"
+)
+wSales <- read.csv(
+  file.choose(),
+  header = T,
+  encoding = "utf-8"
+)
+wWeather <- read.csv(
+  file.choose(),
+  header = T,
+  encoding = "utf-8"
+)
+
+## x %>% f() is the same as f(x)  
+cDemo
+cCrime
+
+
+
+#app <- cCrime <-cDemo<-cEmp by County Name
+appCrimeDemoEmp <- app %>%
+  dplyr::left_join(
+    cCrime,
+    by = c("Store_County"="ï..County_Name")#endcoding problem different on mac and windows
+  ) %>% dplyr::left_join(
+    cDemo,
+    by = c("Store_County"="County_Name")#endcoding problem different on mac and windows
+  ) %>% dplyr::left_join(
+    cEmp,
+    by = c("Store_County"="ï..County_Name")#endcoding problem different on mac and windows
+    
+  )
+
+#wSales <- (app <- cCrime <-cDemo<-cEmp by County Name) by store_num
+salesCountyData <-  wSales %>%
+  dplyr::left_join(
+    appCrimeDemoEmp,
+    by = c("Store_num"="Store_Num")
+  )
+
+
+#changing name join with weaterdate
+weatherDate <- wWeather %>% dplyr::mutate(date = Weather_Date)
+
+
+
+
+#(wSales <- (app <- cCrime <-cDemo<-cEmp by County Name) by store_num ) <- wWeather by Date & stor_num 
+fullyJoined <- salesCountyData %>% dplyr::left_join(
+  weatherDate,
+  by= c("Date"="date", "Store_Weather_Station"="Weather_Station")  
+)
+
+#write.csv(fullyJoined,"fulyJoined.csv", fileEncoding = "utf-8")
+
+
+
 ```
 
-## Including Plots
+I denne oppgaven skal vi være analytikere for en sandwich-bedrift i USA. Vår oppgave blir å analysere og se på detaljer innen salg.
+
+I første oppgaven, skal vi sette sammen seks ulike datasett til et stort. Hvor alt av salgsinformasjon og detaljer som påvirker bedriften på ulike måter.
+Vi starter med å lese inn alle de seks datasettene. Bruker left_join for å få alle kolonnene og rader til å høre sammen i det nye datasettet, left_join ligger i pakken Dplyr.
+Vi summerer profitten for alle butikkene og finner ut at butikk nr 2 og 3, har tall vi tenker er interessante. Butikk nr 2 er ca på 1.5 mill og butikk nr 3 har 0 i profitt. Dette vil være noe bedriften bør vurdere å se nærmere på i nærmeste fremtid.
 
 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r Oppgave 2 Ukentlig salgsrapport total profit, echo=TRUE}
+profit <- with(fullyJoined, sum(Profit[Store_num >'2']))
+profit
+profit2 <- with(fullyJoined, sum(Profit[Store_num =='2']))
+profit2
+profit3 <- with(fullyJoined, sum(Profit[Store_num == "3"]))
+profit3
+```
+## Oppgave 2
+
+```{r Oppgave 2 Ukentlig salgsrapport plot, echo=TRUE}
+store_num_2 <- 
+  salesCountyData %>% 
+  filter(Store_num == "2") %>% 
+  select("County_Unemployed", "Sales", "Description", "Day","Date","Profit")
+
+#total sales per week (day variable)
+sales_by_day <- store_num_2 %>%
+  group_by(Day) %>%
+  summarise(Total_Sales=sum(Sales)) %>% 
+  ungroup
+
+##Visualizing summary data -> 
+#Ranging Top turnover weeks
+sales_by_day %>% 
+  ggplot(aes(reorder(Day,Total_Sales),Total_Sales,fill=Day))+
+  geom_col(show.legend = FALSE,color="black")+
+  geom_text(aes(label=comma(Total_Sales)),size=3,hjust=1,color="black")+
+  coord_flip()+
+  theme_classic()+
+  labs(title = "Total Sales breakdown by week(day variable)",x="Week",y= "Total sales")
 ```
 
+```{r Oppgave 2 Ukentlig salgsrapport plot1, echo=TRUE}
+#filtering for profit  
+profit_by_day <- store_num_2 %>% 
+  group_by(Day) %>%
+  summarise(Total_profit=sum(Profit)) %>% 
+  ungroup
+#plotting profit each week
+ggplot(data=profit_by_day, aes(x=Day, y=Total_profit, group=1)) +
+  geom_line()+
+  scale_x_continuous(n.breaks = 16)+
+  labs(title = "Total weekly profit", x = "Week", y = "Total profit") +
+  geom_point()
+```
 
+```{r Oppgave 2 Ukentlig salgsrapport plot2, echo=TRUE}
+# total weekly turnover
+
+# best sellers 1 weekly  store num 2
+store_1week <- wSales %>% 
+  filter(Store_num == "2", Month == "10") %>% 
+  select("Description", "Price","Sold","Sales","Profit","Date","Month","Day")
+
+#Total turnover week 7
+new_sum <- store_1week %>% 
+  filter(Day == "7") %>% 
+  group_by(Day) %>% 
+  summarise(Total_sales = sum(Sales)) %>% 
+  ungroup()
+new_sum
+#total rev. for store number two in week number 7 is 13954 dollar
+
+
+```
+
+```{r Oppgave 2 Ukentlig salgsrapport, echo=FALSE}
+# Filtering Power City Freestand
+
+store2 <- fullyJoined %>%
+  filter(Store_num =="2")
+
+#Filtering week 1 and
+w1_store2 <- store2[c(1:174),]
+
+w2_store2 <- store2[c(174:373),]
+
+#Week 1 items most sold
+Most_salesw1 <- w1_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Sales) %>%
+  arrange(desc(Sales)) %>%
+  ungroup()
+
+Most_salesw1
+
+
+#Week 1 items most profit
+Most_profitw1 <- w1_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Profit) %>%
+  arrange(desc(Profit)) %>%
+  ungroup()
+
+Most_profitw1
+
+
+#Week 2 items most sales
+Most_salesw2 <- w2_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Sales) %>%
+  arrange(desc(Sales)) %>%
+  ungroup()
+Most_salesw2
+
+
+#Week 2 items most profit
+Most_salesw2 <- w2_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Profit) %>%
+  arrange(desc(Profit)) %>%
+  ungroup()
+Most_salesw2
+
+
+
+#Week 1 least profit
+Least_profitw1 <- w1_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Profit) %>%
+  arrange(Profit) %>%
+  ungroup()
+Least_profitw1
+
+
+##Week 2 least profit
+Least_profitw2 <- w2_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Profit) %>%
+  arrange(Profit) %>%
+  ungroup()
+Least_profitw2
+
+#setting up price groups.
+
+per_item <- w1_store2 %>%
+  group_by(Price_per_item = ifelse(Price <= 1.0, "<1$",
+                                   ifelse(Price > 1 & Price <= 2, "1$",
+                                          ifelse(Price > 2 & Price <= 3, "2$",
+                                                 ifelse(Price > 3 & Price <= 4, "3$",
+                                                        ifelse(Price > 4 & Price <= 5, "4$",
+                                                               ifelse(Price > 5 & Price <= 6, "5$",
+                                                                      ifelse(Price > 6 & Price <= 7, "6$",
+                                                                             ifelse(Price > 7 & Price <= 8.0,
+                                                                                    "7$", ">8$"))))))))) %>%
+  summarise(Sold, Price, Sales, Profit)
+
+
+#plot
+
+figure_1 <-
+  per_item %>%
+  ggplot(aes(x=Price_per_item, y = Sold))+
+  geom_bar(stat= "identity", fill = "blue") +
+  geom_text(aes(label=Profit), vjust= 100, size=3)+
+  labs(title = " Sales per pricegroup", x = "Pricegroup sold $", y =
+         "Total Sales per pricegoup")+
+  theme_bw()
+figure_1
+```
+Vi skal nå lage en ukentlig salgsrapport for bedriften. Dette gjør vi for å kunne se etter spesielle tilfeller salg og resultater, hvor til slutt bedriften kan bruke dataen til å vurdere om de bør forandre på noe.
+Vårt valg av utsalg nr 2, er grunnet våre funn i oppgave 1. Butikk nr 2 har en høy profitt, som gjør det interessant å se på hvordan bedriften driftes.
+I en ukentlig rapport vil det være interessant å se profitt, omsetning og varer som har høye salgstall og lave salgstall. I dette datasettet er ukene representert som variabelen «day».
+Dette gjør at vi ikke har mulighet til å dele opp datasettet for hver dag, noe som gjør at vi ikke kan ta en daglig rapport av salg for alle butikkene. En dagsrapport er essensielt for en ukesrapport, for å kunne få mer detaljert informasjon og nyttig informasjon til ledelsen. Vi vil tro når en bedrift ønsker seg en ukentlig rapport, vil de nok ha muligheten til å kunne gå inn på enkelte dager for finne data. Hver dagsrapport kan hjelpe bedriften til å vite når de skal justere salg og andre tiltak som vil forbedre bedriften.
+
+Datasettet er vrient til tider, derfor vil vi anbefale ledelsen i bedriften og justere hvordan dataen fra de ulike butikkene blir samlet inn. Dette vil gjøre det enklere for å lage gode figurer og tabeller, som gir en bedre oversikt og informasjonsflyt.
+
+Vi rangerer prisen på varer i ulike prisgrupper, dette gjør at vi får en oversikt over hvilken prisgruppe som det blir solgt mest av og hvilken det blir solgt minst av. I butikk nr2, prisgruppen: (1 dollar) er den gruppen som har størst omsetning og den som har minst omsetning er prisgruppen: (2 dollar).
+Videre kan vi se hvordan konsumentene velger varer basert på prisen deres. Det kan vi se gjennom våre to prisgrupper på: (større enn 1 dollar) og (mindre enn 8 dollar), hvor vi ser at prisgruppen (større enn 1 dollar) blir betydelig konsumert mer enn den med 8 dollar. Det viser oss at konsumentene er interessert i å bruke mer enn 1 dollar, men mindre enn 8 dollar.
+Vi legger også merke til at det er ingen varer som går over 8 dollar, det kan gi oss et innblikk i hva konsumentene er villige til å betale. Det kan være noe ledelsen bør tenke på i videre prising av varer ved nye utsalg.
+
+## Oppgave 3
+```{r Oppgave 3 Månedlig rapport rapport, echo=TRUE}
+df_4 <- fullyJoined %>% 
+  filter(Month == 10, Year == 2012, Price >= 0, Cost >= 0, Sold >= 0)# Filtering for needed data
+
+inntekt_summary <- df_4%>%
+  group_by(Store_County) %>% 
+  summarise( Total_revenue = sum(Sales)) %>% #
+  summarise( percent_revenue = Total_revenue/sum(Total_revenue), 
+             Total_revenue = Total_revenue, Country = Store_County) #Choosing data 
+inntekt_summary <- inntekt_summary %>% 
+  mutate(labels = paste(Country, paste(round(percent_revenue,2)*100,'%') , sep =' '))
+#plotting the strongest county
+inntekt_summary %>%
+  ggplot(aes(area = Total_revenue, fill = Country, label = labels)) +
+  geom_treemap() +
+  geom_treemap_text(fontface = "bold", colour = "white", place = "centre", grow = TRUE) + 
+  #Changing estetics
+  theme(legend.position = "none") +
+  labs(title = 'comparing county sales data') + 
+  labs(subtitle = 'Shows the most dominant county') +
+  theme(plot.title = element_text(size = 20, face = "bold"), 
+        plot.subtitle = element_text(size = 12))
+
+```
+Vi skal nå lage en månedlig salgsrapport for bedriften.
+Vi sammenligner de ulike butikkene i forhold til hvor de ligger geografisk. Ut ifra dette kan vi se på variabelen «PowerCounty», hvor vi finner ut hvilket County som har høyest profitt. Derifra kan man se på variablene «Crime» og «Weather» og se på hvordan de er knyttet opp til det County med høyest profitt, om de viser oss en sammenheng mellom lav kriminalitet og godt vær. «PowerCounty» er den variabelen med høyest salgsprosent, som viser oss så mye som 35% av all salgsdataen for hele datasettet. «RailCounty» er det County som har lavest salgsprosent av hele datasettet, på hele 8%.
+
+
+## Oppgave 4
+Dataene kan brukes til å bestemme nye lokasjoner til nye utslag. Ved bruk av dataen, kan konsernledelsen se etter sammenhengen mellom omsetning, vær, kriminalitet og velferd. Det er flere variabler som konsernledelsen bør og kan se gjennom, men disse kan være gode indikatorer på hvor nytt utsalg bør være.
+Geografisk sett vil steder med godt vær og lite kriminalitet være gode forutsetninger for nye utsalg, dette kan ofte være steder med en høyere velferd enn resterende av de andre kommuner.
+Vi kan også se at frittstående butikker er mer lønnsomme.
+Fra oppgave 3 kan vi legge merke til at det er stort utsalg og høy profitt i «PowerCounty» som er en sterk indikator på at et nytt utsalg her vil også kunne drifte godt.
+
+Ved å se på prisgruppene fra oppgave 2, nevnt lenger opp, kan man tro at det er konsumenter med et lavere budsjett som oftest handler. Det vil vi tro grunnet at prisgruppen: (større enn 1 dollar) er den høyeste av prisgruppene. Det vil være lurt av konsernledelsen å legge et nytt utsalg i en av kommunene som også har en høy profitt, men ikke i den høyeste som er «PowerCounty», dette er grunnet unødvendig konkurranse og det vil mye mulig være lettere å starte et nytt utsalg i et fylke med mindre konkurranse.
+
+Som en oppsummering bør konsernledelsen og bedriften se på viktige forutsetninger som nevnt over, før de velger et nytt geografisk område for nytt utsalg.

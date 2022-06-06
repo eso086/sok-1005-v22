@@ -1,9 +1,6 @@
 
 getwd()
-install.packages("hrbrthemes")
-install.packages("extrafont")
-install.packages("ggthemes")
-install.packages("treemapify")
+#-----Librarys-----
 library(tidyverse)
 library(janitor)
 library(lubridate) ## for date time manipulation
@@ -15,7 +12,7 @@ library(ggthemes)
 library(treemapify)
 
 
-#-------- importing datasett---------
+#-----importing datasett-----
 #file.choose() for mac -> choose.files() for windows
 app <- read.csv(
   file.choose(),
@@ -58,12 +55,14 @@ cCrime
 appCrimeDemoEmp <- app %>%
   dplyr::left_join(
     cCrime,
-    by = c("Store_County"="ï..County_Name")#Encoding issues different on mac and windows, hence the ï..
+    by = c("Store_County"="?..County_Name")#endcoding problem different on mac and windows
   ) %>% dplyr::left_join(
     cDemo,
-    by = c("Store_County"="County_Name")#Encoding issues different on mac and windows, hence the ï..
-    by = c("Store_County"="ï..County_Name")#Encoding issues different on mac and windows, hence the ï..
-                                           
+    by = c("Store_County"="County_Name")#endcoding problem different on mac and windows
+  ) %>% dplyr::left_join(
+    cEmp,
+    by = c("Store_County"="?..County_Name")#endcoding problem different on mac and windows
+    
   )
 
 #wSales <- (app <- cCrime <-cDemo<-cEmp by County Name) by store_num
@@ -98,7 +97,7 @@ profit2
 
 
 ##oppgave 2
-#2 -----Salgs rapport butikk nr 2-------------------
+#-----Salgs rapport butikk nr 2-----
 
 # show total profit for store number 2
 proff_store2 <- with(fullyJoined, sum(Profit[Store_num =='2']))
@@ -255,7 +254,7 @@ figure_1
   
 
 
-#-------Oppgave 3----------
+#-----Oppgave 3-----
 
 df_4 <- fullyJoined %>% 
   filter(Month == 10, Year == 2012, Price >= 0, Cost >= 0, Sold >= 0)# Filtering for needed data
@@ -275,7 +274,7 @@ inntekt_summary %>%
   #Changing estetics
   theme(legend.position = "none") +
   labs(title = 'comparing county sales data') + 
-  labs(subtitle = 'Shows the most dominant county Power County') +
+  labs(subtitle = 'Shows the most dominant county') +
   theme(plot.title = element_text(size = 20, face = "bold"), 
         plot.subtitle = element_text(size = 12))
 

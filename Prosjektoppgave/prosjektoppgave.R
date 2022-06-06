@@ -43,19 +43,23 @@ wWeather <- read.csv(
 )
 
 ## x %>% f() er det samme som f(x)  
+cDemo
+cCrime
+
 
 
 #app <- cCrime <-cDemo<-cEmp by County Name
 appCrimeDemoEmp <- app %>%
   dplyr::left_join(
     cCrime,
-    by = c("Store_County"="County_Name")
+    by = c("Store_County"="ï..County_Name")#Navn må muligens endres dersom det kjøres på en annen maskin, Encoding feil.
   ) %>% dplyr::left_join(
     cDemo,
-    by = c("Store_County"="County_Name")
+    by = c("Store_County"="County_Name")#Navn må muligens endres dersom det kjøres på en annen maskin, Encoding feil.
   ) %>% dplyr::left_join(
     cEmp,
-    by = c("Store_County"="County_Name")
+    by = c("Store_County"="ï..County_Name")#Navn må muligens endres dersom det kjøres på en annen maskin, Encoding feil.
+                                           
   )
 
 #wSales <- (app <- cCrime <-cDemo<-cEmp by County Name) by store_num
@@ -79,6 +83,8 @@ fullyJoined <- salesCountyData %>% dplyr::left_join(
 )
 
 write.csv(fullyJoined,"fulyJoined.csv", fileEncoding = "utf-8")
+
+
 
 #Sjekker profitt og total profitt for hele bedriften.
 profit <- with(fullyJoined, sum(Profit[Store_num >'2']))
@@ -130,7 +136,30 @@ ggplot(data=profit_by_day, aes(x=Day, y=Total_profit, group=1)) +
 
 # -----se hvilken varer som selger best over en uke---------
 
-#--------lÃ¥nt kode fra k-------
+# best sellers 1 week 1 store
+wSales
+store_1week <- wSales %>% 
+  filter(Store_num == "2", Month == "10") %>% 
+  select("Description", "Price","Sold","Sales","Profit","Date","Month","Day")
+
+
+
+
+#-------price groups -------
+sales_price_gr <- s %>% 
+  group_by(price_group = ifelse(Price <= 1.0, "price_below_$1", 
+                                ifelse(Price > 1 & Price <= 2, "price_$1", 
+                                       ifelse(Price > 2 & Price <= 3, "price_$2", 
+                                              ifelse(Price > 3 & Price <= 4, "price_$3", 
+                                                     ifelse(Price > 4 & Price <= 5, "price_$4", 
+                                                            ifelse(Price > 5 & Price <= 6, "price_$5", 
+                                                                   ifelse(Price > 6 & Price <= 7, "price_$6", 
+                                                                          ifelse(Price > 7 & Price <= 8.0, "price_$7", "price_over_$8"))))))))) %>% 
+  summarise(Sold, Price, Sales, Profit)
+
+
+
+#--------lånt kode fra k-------
 S2 <- fullyJoined %>% 
   filter(Store_num == "2", Year == "2012")
 

@@ -52,13 +52,13 @@ cCrime
 appCrimeDemoEmp <- app %>%
   dplyr::left_join(
     cCrime,
-    by = c("Store_County"="ï..County_Name")#Navn må muligens endres dersom det kjøres på en annen maskin, Encoding feil.
+    by = c("Store_County"="?..County_Name")#Navn m? muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
   ) %>% dplyr::left_join(
     cDemo,
-    by = c("Store_County"="County_Name")#Navn må muligens endres dersom det kjøres på en annen maskin, Encoding feil.
+    by = c("Store_County"="County_Name")#Navn m? muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
   ) %>% dplyr::left_join(
     cEmp,
-    by = c("Store_County"="ï..County_Name")#Navn må muligens endres dersom det kjøres på en annen maskin, Encoding feil.
+    by = c("Store_County"="?..County_Name")#Navn m? muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
                                            
   )
 
@@ -148,8 +148,100 @@ new_sum <- store_1week %>%
 new_sum
 #Det totale salget for butikk nummer 2 i uke nummer 7 er 13954 dollar.
 
-#finne Største bidragsytere til salget.
+#--------JÃ¸rra---------
 
+
+# Filtering Power City Freestand
+
+store2 <- fullyJoined %>%
+  filter(Store_num =="2")
+
+#Filtering week 1 and
+w1_store2 <- store2[c(1:174),]
+
+w2_store2 <- store2[c(174:373),]
+
+#Week 1 items most sold
+Most_salesw1 <- w1_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Sales) %>%
+  arrange(desc(Sales)) %>%
+  ungroup()
+
+Most_salesw1
+
+
+#Week 1 items most profit
+Most_profitw1 <- w1_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Profit) %>%
+  arrange(desc(Profit)) %>%
+  ungroup()
+
+Most_profitw1
+
+
+#Week 2 items most sales
+Most_salesw2 <- w2_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Sales) %>%
+  arrange(desc(Sales)) %>%
+  ungroup()
+Most_salesw2
+
+
+#Week 2 items most profit
+Most_salesw2 <- w2_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Profit) %>%
+  arrange(desc(Profit)) %>%
+  ungroup()
+Most_salesw2
+
+
+
+#Week 1 least profit
+Least_profitw1 <- w1_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Profit) %>%
+  arrange(Profit) %>%
+  ungroup()
+Least_profitw1
+
+
+##Week 2 least profit
+Least_profitw2 <- w2_store2 %>%
+  group_by(INV_NUMBER, Description, Price, Sold, Cost, Profit, Sales) %>%
+  summarise(Profit) %>%
+  arrange(Profit) %>%
+  ungroup()
+Least_profitw2
+
+#### Arranging price to item
+
+per_item <- w1_store2 %>%
+  group_by(Price_per_item = ifelse(Price <= 1.0, "<1$",
+                                   ifelse(Price > 1 & Price <= 2, "1$",
+                                          ifelse(Price > 2 & Price <= 3, "2$",
+                                                 ifelse(Price > 3 & Price <= 4, "3$",
+                                                        ifelse(Price > 4 & Price <= 5, "4$",
+                                                               ifelse(Price > 5 & Price <= 6, "5$",
+                                                                      ifelse(Price > 6 & Price <= 7, "6$",
+                                                                             ifelse(Price > 7 & Price <= 8.0,
+                                                                                    "7$", ">8$"))))))))) %>%
+  summarise(Sold, Price, Sales, Profit)
+
+
+######PLOT
+figure_1 <-
+  per_item %>%
+  ggplot(aes(x=Price_per_item, y = Sold))+
+  geom_bar(stat= "identity", fill = "blue") +
+  geom_text(aes(label=Profit), vjust= 100, size=3)+
+  labs(title = " Sales per pricegroup", x = "Pricegroup sold $", y =
+         "Total Sales per pricegoup")+
+  theme_bw()
+figure_1
 
 
 

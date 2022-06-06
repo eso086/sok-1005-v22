@@ -2,6 +2,8 @@
 getwd()
 install.packages("hrbrthemes")
 install.packages("extrafont")
+install.packages("ggthemes")
+install.packages("treemapify")
 library(tidyverse)
 library(janitor)
 library(lubridate) ## for date time manipulation
@@ -9,9 +11,11 @@ library(scales) ## Formatting numbers and values
 library(hrbrthemes)# For changing ggplot theme
 library(extrafont) # More font options
 library(ggplot2) 
+library(ggthemes)
+library(treemapify)
 
 
-#---------- importerer datasett (fra kilde)---------
+#-------- importing datasett---------
 #file.choose() for mac -> choose.files() for windows
 app <- read.csv(
   file.choose(),
@@ -44,7 +48,7 @@ wWeather <- read.csv(
   encoding = "utf-8"
 )
 
-## x %>% f() er det samme som f(x)  
+## x %>% f() is the same as f(x)  
 cDemo
 cCrime
 
@@ -54,13 +58,11 @@ cCrime
 appCrimeDemoEmp <- app %>%
   dplyr::left_join(
     cCrime,
-    by = c("Store_County"="ï..County_Name")#Navn må muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
+    by = c("Store_County"="ï..County_Name")#Encoding issues different on mac and windows, hence the ï..
   ) %>% dplyr::left_join(
     cDemo,
-    by = c("Store_County"="County_Name")#Navn må muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
-  ) %>% dplyr::left_join(
-    cEmp,
-    by = c("Store_County"="ï..County_Name")#Navn må muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
+    by = c("Store_County"="County_Name")#Encoding issues different on mac and windows, hence the ï..
+    by = c("Store_County"="ï..County_Name")#Encoding issues different on mac and windows, hence the ï..
                                            
   )
 
@@ -71,8 +73,8 @@ salesCountyData <-  wSales %>%
     by = c("Store_num"="Store_Num")
   )
 
-#### regner med Weather_Date er antall dager siden 1-1-1960(version 1 av data)
-#endrer navn på date for å joine med SCD...
+
+#changing name join with weaterdate
 weatherDate <- wWeather %>% dplyr::mutate(date = Weather_Date)
 
 
@@ -88,15 +90,15 @@ write.csv(fullyJoined,"fulyJoined.csv", fileEncoding = "utf-8")
 
 
 
-#Sjekker profitt og total profitt for hele bedriften.
+#check total profit for all stores and store number 2.
 profit <- with(fullyJoined, sum(Profit[Store_num >'2']))
 profit
-profit2 <- with(fullyJoined, sum(Profit[Store_num =='3']))
+profit2 <- with(fullyJoined, sum(Profit[Store_num =='2']))
 profit2
 
 
 ##oppgave 2
-#2 Salgs rapport butikk nr 2----------------------------------------------------
+#2 -----Salgs rapport butikk nr 2-------------------
 
 # show total profit for store number 2
 proff_store2 <- with(fullyJoined, sum(Profit[Store_num =='2']))
@@ -136,7 +138,7 @@ ggplot(data=profit_by_day, aes(x=Day, y=Total_profit, group=1)) +
   labs(title = "Total weekly profit", x = "Week", y = "Total profit") +
   geom_point()
 
-# -----total weekly turnover---------
+# total weekly turnover
 
 # best sellers 1 weekly  store num 2
 wSales
@@ -144,15 +146,15 @@ store_1week <- wSales %>%
   filter(Store_num == "2", Month == "10") %>% 
   select("Description", "Price","Sold","Sales","Profit","Date","Month","Day")
 
+#Total turnover week 7
 new_sum <- store_1week %>% 
   filter(Day == "7") %>% 
   group_by(Day) %>% 
   summarise(Total_sales = sum(Sales)) %>% 
   ungroup()
 new_sum
-
 #total rev. for store number two in week number 7 is 13954 dollar
-#--------Oppgave 2---------
+
 
 
 # Filtering Power City Freestand
@@ -254,13 +256,41 @@ figure_1
 
 
 #-------Oppgave 3----------
-#filtering for profit.
 
-Sales_pr_store <- wSales %>%
-  filter(Month == "4") %>% 
-  group_by(Store_num) %>%
-  summarise(Total_Sales=sum(Sales)) %>% 
-  ungroup
+df_4 <- fullyJoined %>% 
+  filter(Month == 10, Year == 2012, Price >= 0, Cost >= 0, Sold >= 0)# Filtering for needed data
+
+inntekt_summary <- df_4%>%
+  group_by(Store_County) %>% 
+  summarise( Total_revenue = sum(Sales)) %>% #
+  summarise( percent_revenue = Total_revenue/sum(Total_revenue), 
+             Total_revenue = Total_revenue, Country = Store_County) #Choosing data 
+inntekt_summary <- inntekt_summary %>% 
+  mutate(labels = paste(Country, paste(round(percent_revenue,2)*100,'%') , sep =' '))
+#plotting the strongest county
+inntekt_summary %>%
+  ggplot(aes(area = Total_revenue, fill = Country, label = labels)) +
+  geom_treemap() +
+  geom_treemap_text(fontface = "bold", colour = "white", place = "centre", grow = TRUE) + 
+  #Changing estetics
+  theme(legend.position = "none") +
+  labs(title = 'comparing county sales data') + 
+  labs(subtitle = 'Shows the most dominant county Power County') +
+  theme(plot.title = element_text(size = 20, face = "bold"), 
+        plot.subtitle = element_text(size = 12))
+
+
+  
+  
+  
+
+
+
+
+
+
+
+
 
 
   

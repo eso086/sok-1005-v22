@@ -1,0 +1,28 @@
+---
+title: "Prosjekt oppgave"
+author: "Sofia-Andrea Møen, Idunn Raade Olsen og Erlend Sørra"
+date: "6/6/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+

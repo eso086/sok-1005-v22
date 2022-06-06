@@ -9,6 +9,8 @@ library(scales) ## Formatting numbers and values
 library(hrbrthemes)# For changing ggplot theme
 library(extrafont) # More font options
 library(ggplot2) 
+
+
 #---------- importerer datasett (fra kilde)---------
 #file.choose() for mac -> choose.files() for windows
 app <- read.csv(
@@ -52,13 +54,13 @@ cCrime
 appCrimeDemoEmp <- app %>%
   dplyr::left_join(
     cCrime,
-    by = c("Store_County"="?..County_Name")#Navn m? muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
+    by = c("Store_County"="ï..County_Name")#Navn må muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
   ) %>% dplyr::left_join(
     cDemo,
-    by = c("Store_County"="County_Name")#Navn m? muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
+    by = c("Store_County"="County_Name")#Navn må muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
   ) %>% dplyr::left_join(
     cEmp,
-    by = c("Store_County"="?..County_Name")#Navn m? muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
+    by = c("Store_County"="ï..County_Name")#Navn må muligens endres dersom det kj?res p? en annen maskin, Encoding feil.
                                            
   )
 
@@ -70,7 +72,7 @@ salesCountyData <-  wSales %>%
   )
 
 #### regner med Weather_Date er antall dager siden 1-1-1960(version 1 av data)
-#endrer navn p? date for ? joine med SCD...
+#endrer navn på date for å joine med SCD...
 weatherDate <- wWeather %>% dplyr::mutate(date = Weather_Date)
 
 
@@ -95,6 +97,8 @@ profit2
 
 ##oppgave 2
 #2 Salgs rapport butikk nr 2----------------------------------------------------
+
+# show total profit for store number 2
 proff_store2 <- with(fullyJoined, sum(Profit[Store_num =='2']))
 proff_store2
 
@@ -104,14 +108,14 @@ store_num_2 <-
   filter(Store_num == "2") %>% 
   select("County_Unemployed", "Sales", "Description", "Day","Date","Profit")
 
-#total sales per day()
+#total sales per week (day variable)
 sales_by_day <- store_num_2 %>%
   group_by(Day) %>%
   summarise(Total_Sales=sum(Sales)) %>% 
   ungroup
 
 ##Visualizing summary data -> 
-#Her kan vi uke rangert etter hÃ¸yeste ommsetning
+#Ranging Top turnover weeks
 sales_by_day %>% 
   ggplot(aes(reorder(Day,Total_Sales),Total_Sales,fill=Day))+
   geom_col(show.legend = FALSE,color="black")+
@@ -132,9 +136,9 @@ ggplot(data=profit_by_day, aes(x=Day, y=Total_profit, group=1)) +
   labs(title = "Total weekly profit", x = "Week", y = "Total profit") +
   geom_point()
 
-# -----se hvilken varer som selger best over en uke---------
+# -----total weekly turnover---------
 
-# best sellers 1 week 1 store
+# best sellers 1 weekly  store num 2
 wSales
 store_1week <- wSales %>% 
   filter(Store_num == "2", Month == "10") %>% 
@@ -146,9 +150,9 @@ new_sum <- store_1week %>%
   summarise(Total_sales = sum(Sales)) %>% 
   ungroup()
 new_sum
-#Det totale salget for butikk nummer 2 i uke nummer 7 er 13954 dollar.
 
-#--------JÃ¸rra---------
+#total rev. for store number two in week number 7 is 13954 dollar
+#--------Oppgave 2---------
 
 
 # Filtering Power City Freestand
@@ -217,7 +221,7 @@ Least_profitw2 <- w2_store2 %>%
   ungroup()
 Least_profitw2
 
-#### Arranging price to item
+#setting up price groups.
 
 per_item <- w1_store2 %>%
   group_by(Price_per_item = ifelse(Price <= 1.0, "<1$",
@@ -232,7 +236,8 @@ per_item <- w1_store2 %>%
   summarise(Sold, Price, Sales, Profit)
 
 
-######PLOT
+#plot
+
 figure_1 <-
   per_item %>%
   ggplot(aes(x=Price_per_item, y = Sold))+
@@ -251,7 +256,6 @@ figure_1
 #-------Oppgave 3----------
 #filtering for profit.
 
-
 Sales_pr_store <- wSales %>%
   filter(Month == "4") %>% 
   group_by(Store_num) %>%
@@ -259,11 +263,6 @@ Sales_pr_store <- wSales %>%
   ungroup
 
 
-
-sammenligning <- Sales_pr_store %>% 
-  #group_by(Store_num) %>% 
-  summarise(mean(Total_Sales)) %>% 
-  #ungroup()
   
   
   
